@@ -51,9 +51,10 @@ jobs:
     - name: Commit and Push HLS Files
       run: |
         cd hls-content
+        ls
         git config --global user.name 'hindu744'
         git config --global user.email 'hhindu744@gmail.com'
         git add .
         git commit -m "Upload HLS files"
         git remote set-url origin https://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@github.com/hindu744/hls-content
-        git push
+        git push origin main
