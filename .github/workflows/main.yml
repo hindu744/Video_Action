@@ -56,5 +56,5 @@ jobs:
         git config --global user.email 'hhindu744@gmail.com'
         git add .
         git commit -m "Upload HLS files"
-        git remote set-url origin https://hindu744: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@github.com/hindu744/hls-content
+        git remote set-url origin https://hindu744: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@github.com/hindu744/hls-content
         git push
