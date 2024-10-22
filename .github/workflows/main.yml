@@ -38,32 +38,22 @@ jobs:
     - name: Convert Video to HLS using FFmpeg
       run: ffmpeg -i video -codec:v libx264 -codec:a aac -hls_time 12 -hls_playlist_type vod -start_number 0 -hls_list_size 0 -f hls ./hls_output/index.m3u8
       # This will create an HLS playlist (index.m3u8) and the .ts files in the "hls_output" directory.
-    - name: Inter chek
+      
+    - name: Inter check
       run: | 
         git clone https://github.com/hindu744/hls-content.git
         ls
 
-
-    - name: Checkout Target Repository
-      uses: actions/checkout@v3
-      with:
-        repository: hindu744/hls-content
-        token: ${{ secrets.TOKEN }}
-        ref: main
-        path: hls_output_repo
-      # Replace "username/target-repo" with the repository you want to push the files to.
-
     - name: Copy HLS Files
-      run: cp -r hls_output/* hls_output_repo/
+      run: cp -r hls_output/* hls-content
       # This copies all HLS files into the target repository's directory.
 
     - name: Commit and Push HLS Files
       run: |
-        git clone https://github.com/hindu744/hls-content.git
-        ls
-        cd hls_output_repo
+        cd hls-content
         git config --global user.name 'hindu744'
         git config --global user.email 'hhindu744@gmail.com'
         git add .
         git commit -m "Upload HLS files"
+        remote set-url origin https://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@github.com/hindu744/hls-content
         git push
