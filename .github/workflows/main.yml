@@ -21,7 +21,7 @@ jobs:
         VIDEO_URL=$(cat link.txt)
         echo "Video URL is $VIDEO_URL"
         echo "VIDEO_URL=$VIDEO_URL" >> $GITHUB_ENV
-        VIDEO_URL=$(cat name.txt)
+        VIDEO_ID=$(cat name.txt)
         echo "Video Id is $VIDEO_ID"
         echo "VIDEO_ID=$VIDEO_ID" >> $GITHUB_ENV
       # Replace "path/to/url_file.txt" with the path to the file containing the video URL.
