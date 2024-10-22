@@ -35,7 +35,7 @@ jobs:
       uses: actions/checkout@v3
       with:
         repository: hindu744/hls-content
-        token: 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
+        token: ${{ secrets.TOKEN }}
         ref: main
         path: hls_output_repo
       # Replace "username/target-repo" with the repository you want to push the files to.
