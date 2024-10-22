@@ -55,8 +55,8 @@ jobs:
     - name: Commit and Push HLS Files
       run: |
         cd hls_output_repo
-        git config --global user.name 'github-actions'
-        git config --global user.email 'github-actions@github.com'
+        git config --global user.name 'hindu744'
+        git config --global user.email 'hhindu744@gmail.com'
         git add .
         git commit -m "Upload HLS files"
         git push
