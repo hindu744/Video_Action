@@ -1,0 +1,54 @@
+name: Process Video to HLS
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  download-and-process:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v3
+
+    - name: Extract Video URL
+      id: extract_url
+      run: |
+        VIDEO_URL=$(cat link.txt)
+        echo "Video URL is $VIDEO_URL"
+        echo "VIDEO_URL=$VIDEO_URL" >> $GITHUB_ENV
+      # Replace "path/to/url_file.txt" with the path to the file containing the video URL.
+
+    - name: Download Video
+      run: wget -O video.mp4 ${{ env.VIDEO_URL }}
+      # Uses the extracted URL to download the video.
+
+    - name: Convert Video to HLS using FFmpeg
+      run: |
+        mkdir -p hls_output
+        ffmpeg -i video.mp4 -codec: copy -start_number 0 -hls_time 10 -hls_list_size 0 -f hls hls_output/index.m3u8
+      # This will create an HLS playlist (index.m3u8) and the .ts files in the "hls_output" directory.
+
+    - name: Checkout Target Repository
+      uses: actions/checkout@v3
+      with:
+        repository: hindu744/hls-content
+        token: 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
+        ref: main
+        path: hls_output_repo
+      # Replace "username/target-repo" with the repository you want to push the files to.
+
+    - name: Copy HLS Files
+      run: cp -r hls_output/* hls_output_repo/
+      # This copies all HLS files into the target repository's directory.
+
+    - name: Commit and Push HLS Files
+      run: |
+        cd hls_output_repo
+        git config --global user.name 'github-actions'
+        git config --global user.email 'github-actions@github.com'
+        git add .
+        git commit -m "Upload HLS files"
+        git push
