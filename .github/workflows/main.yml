@@ -15,12 +15,15 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v3
 
-    - name: Extract Video URL
+    - name: Extract Video URL and ID
       id: extract_url
       run: |
         VIDEO_URL=$(cat link.txt)
         echo "Video URL is $VIDEO_URL"
         echo "VIDEO_URL=$VIDEO_URL" >> $GITHUB_ENV
+        VIDEO_URL=$(cat name.txt)
+        echo "Video Id is $VIDEO_ID"
+        echo "VIDEO_ID=$VIDEO_ID" >> $GITHUB_ENV
       # Replace "path/to/url_file.txt" with the path to the file containing the video URL.
 
     - name: Install FFMPEG
@@ -39,22 +42,22 @@ jobs:
       run: ffmpeg -i video -codec:v libx264 -codec:a aac -hls_time 12 -hls_playlist_type vod -start_number 0 -hls_list_size 0 -f hls ./hls_output/index.m3u8
       # This will create an HLS playlist (index.m3u8) and the .ts files in the "hls_output" directory.
       
-    - name: Inter check
-      run: | 
-        git clone https://github.com/hindu744/hls-content.git
-        ls
-
     - name: Copy HLS Files
-      run: cp -r hls_output/* hls-content
+      run: |
+        mkdir hls-content
+        cp -r hls_output/* hls-content
       # This copies all HLS files into the target repository's directory.
 
     - name: Commit and Push HLS Files
       run: |
         cd hls-content
         ls
+        git init
         git config --global user.name 'hindu744'
         git config --global user.email 'hhindu744@gmail.com'
+        git branch -m ${{ env.VIDEO_ID }}
         git add .
         git commit -m "Upload HLS files"
+        git remote add origin https://github.com/hindu744/hls-content.git
         git remote set-url origin https://hindu744:${{secrets.TOKEN}}@github.com/hindu744/hls-content
-        git push
+        git push origin ${{ env.VIDEO_ID }}
