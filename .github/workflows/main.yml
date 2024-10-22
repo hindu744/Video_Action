@@ -34,7 +34,7 @@ jobs:
         ls
 
     - name: Convert Video to HLS using FFmpeg
-      run: ffmpeg -i video -profile:v baseline -level 3.0 -codec:copy -start_number 0 -hls_time 10 -hls_list_size 0 -f hls ./hls_output/index.m3u8
+      run: ffmpeg -i video -codec:v libx264 -codec:a aac -hls_time 12 -hls_playlist_type vod -start_number 0 -hls_list_size 0 -f hls ./hls_output/index.m3u8
       # This will create an HLS playlist (index.m3u8) and the .ts files in the "hls_output" directory.
 
     - name: Checkout Target Repository
