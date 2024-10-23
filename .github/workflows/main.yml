@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  download-and-process:
+  Download-and-Process:
     runs-on: ubuntu-latest
     permissions:
        contents: write
@@ -23,7 +23,7 @@ jobs:
         echo "VIDEO_URL=$VIDEO_URL" >> $GITHUB_ENV
       # Replace "path/to/url_file.txt" with the path to the file containing the video URL.
 
-    - name: Install FFMPEG
+    - name: Install FFMPEG and Git
       run: sudo apt-get update && sudo apt-get install -y ffmpeg git
 
     - name: Download Video
@@ -42,11 +42,11 @@ jobs:
 
     - name: Convert Video to HLS using FFmpeg
       run: |
-        ffmpeg -i video -vf "scale=-2:240" -codec:v libx264 -codec:a aac -hls_time 12 -hls_playlist_type vod -start_number 0 -hls_list_size 0 -f hls ./hls_output/240p/index.m3u8 &
-        ffmpeg -i video -vf "scale=-2:360" -codec:v libx264 -codec:a aac -hls_time 12 -hls_playlist_type vod -start_number 0 -hls_list_size 0 -f hls ./hls_output/360p/index.m3u8 &
-        ffmpeg -i video -vf "scale=-2:480" -codec:v libx264 -codec:a aac -hls_time 12 -hls_playlist_type vod -start_number 0 -hls_list_size 0 -f hls ./hls_output/480p/index.m3u8 &
-        ffmpeg -i video -vf "scale=-2:720" -codec:v libx264 -codec:a aac -hls_time 12 -hls_playlist_type vod -start_number 0 -hls_list_size 0 -f hls ./hls_output/720p/index.m3u8 &
-        ffmpeg -i video -vf "scale=-2:1080" -codec:v libx264 -codec:a aac -hls_time 12 -hls_playlist_type vod -start_number 0 -hls_list_size 0 -f hls ./hls_output/1080p/index.m3u8 &
+        ffmpeg -i video -vf "scale=-1:240" -codec:v libx264 -codec:a aac -b:v 800k -hls_time 12 -hls_playlist_type vod -start_number 0 -hls_list_size 0 -f hls ./hls_output/240p/index.m3u8 &
+        ffmpeg -i video -vf "scale=-1:360" -codec:v libx264 -codec:a aac -b:v 1400k -hls_time 12 -hls_playlist_type vod -start_number 0 -hls_list_size 0 -f hls ./hls_output/360p/index.m3u8 &
+        ffmpeg -i video -vf "scale=-1:480" -codec:v libx264 -codec:a aac -b:v 2000k -hls_time 12 -hls_playlist_type vod -start_number 0 -hls_list_size 0 -f hls ./hls_output/480p/index.m3u8 &
+        ffmpeg -i video -vf "scale=-1:720" -codec:v libx264 -codec:a aac -b:v 3500k -hls_time 12 -hls_playlist_type vod -start_number 0 -hls_list_size 0 -f hls ./hls_output/720p/index.m3u8 &
+        ffmpeg -i video -vf "scale=-1:1080" -codec:v libx264 -codec:a aac -b:v 6000k -hls_time 12 -hls_playlist_type vod -start_number 0 -hls_list_size 0 -f hls ./hls_output/1080p/index.m3u8 &
         wait
       # This will create an HLS playlist (index.m3u8) and the .ts files in the "hls_output" directory.
       
@@ -55,6 +55,26 @@ jobs:
         mkdir hls-content
         cp -r hls_output/* hls-content
       # This copies all HLS files into the target repository's directory.
+      
+    - name: Create Master Playlist
+      run: |
+        echo "#EXTM3U" >> master.m3u8
+      	
+      	echo "#EXT-X-STREAM-INF:BANDWIDTH=800000,RESOLUTION=426x240" >> master.m3u8
+      	echo "240p/index.m3u8" >> master.m3u8
+      	
+      	echo "#EXT-X-STREAM-INF:BANDWIDTH=1400000,RESOLUTION=640x360" >> master.m3u8
+      	echo "360p/index.m3u8" >> master.m3u8
+      	
+      	echo "#EXT-X-STREAM-INF:BANDWIDTH=2000000,RESOLUTION=854x480" >> master.m3u8
+      	echo "480p/index.m3u8" >> master.m3u8
+      	
+      	echo "#EXT-X-STREAM-INF:BANDWIDTH=3500000,RESOLUTION=1280x720" >> master.m3u8
+      	echo "720p/index.m3u8" >> master.m3u8
+      	
+      	echo "#EXT-X-STREAM-INF:BANDWIDTH=6000000,RESOLUTION=1920x1080" >> master.m3u8
+      	echo "1080p/index.m3u8" >> master.m3u8
+
 
     - name: Commit and Push HLS Files
       run: |
