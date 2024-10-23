@@ -24,10 +24,10 @@ jobs:
       # Replace "path/to/url_file.txt" with the path to the file containing the video URL.
 
     - name: Install FFMPEG and Git
-      run: sudo apt-get update && sudo apt-get install -y ffmpeg git tree
+      run: sudo apt-get update && sudo apt-get install -y ffmpeg git tree axel
 
     - name: Download Video
-      run: wget -O video ${{ env.VIDEO_URL }}
+      run: axel -o video "${{ env.VIDEO_URL }}"
       # Uses the extracted URL to download the video.
 
     - name: Make Output Folder
