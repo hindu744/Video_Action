@@ -24,7 +24,7 @@ jobs:
       # Replace "path/to/url_file.txt" with the path to the file containing the video URL.
 
     - name: Install FFMPEG and Git
-      run: sudo apt-get update && sudo apt-get install -y ffmpeg git
+      run: sudo apt-get update && sudo apt-get install -y ffmpeg git tree
 
     - name: Download Video
       run: wget -O video ${{ env.VIDEO_URL }}
@@ -53,7 +53,7 @@ jobs:
     - name: Copy HLS Files
       run: |
         mkdir hls-content
-        ls
+        tree
         cp -r hls_output/* hls-content
         cp master.m3u8 hls-content
       # This copies all HLS files into the target repository's directory.
@@ -64,7 +64,7 @@ jobs:
         echo "Video Id is $VIDEO_ID"
         
         cd hls-content
-        ls
+        tree
         git init
         git config --global user.name 'hindu744'
         git config --global user.email 'hhindu744@gmail.com'
