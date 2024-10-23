@@ -35,6 +35,7 @@ jobs:
 
     - name: Make Output Folder
       run: |
+        mkdir hls_output
         mkdir hls_output/240p
         mkdir hls_output/360p
         mkdir hls_output/480p
