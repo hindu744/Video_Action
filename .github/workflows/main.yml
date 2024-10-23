@@ -72,5 +72,5 @@ jobs:
         git commit -m "Upload HLS files"
         git remote add origin https://github.com/hindu744/hls-content.git
         git remote set-url origin https://hindu744:${{secrets.TOKEN}}@github.com/hindu744/hls-content
-        git push --set-upstream origin $VIDEO_ID
-        git push origin $VIDEO_ID
+        git push --set-upstream origin '$VIDEO_ID'
+        git push origin '$VIDEO_ID'
