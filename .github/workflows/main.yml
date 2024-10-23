@@ -53,6 +53,7 @@ jobs:
     - name: Copy HLS Files
       run: |
         mkdir hls-content
+        ls
         cp -r hls_output/* hls-content
         cp master.m3u8 hls-content
       # This copies all HLS files into the target repository's directory.
