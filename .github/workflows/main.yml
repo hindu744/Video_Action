@@ -55,8 +55,8 @@ jobs:
         mkdir hls-content
         cp -r hls_output/* hls-content
       # This copies all HLS files into the target repository's directory.
-      
-    - name: Create Master Playlist
+
+    - name: Create Master PlayList
       run: |
         echo "#EXTM3U" > master.m3u8
         echo "#EXT-X-STREAM-INF:BANDWIDTH=800000,RESOLUTION=426x240" >> master.m3u8
@@ -69,7 +69,6 @@ jobs:
         echo "720p/index.m3u8" >> master.m3u8
         echo "#EXT-X-STREAM-INF:BANDWIDTH=6000000,RESOLUTION=1920x1080" >> master.m3u8
         echo "1080p/index.m3u8" >> master.m3u8
-      	
 
     - name: Commit and Push HLS Files
       run: |
