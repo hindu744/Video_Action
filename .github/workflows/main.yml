@@ -27,7 +27,7 @@ jobs:
       run: sudo apt-get update && sudo apt-get install -y ffmpeg git tree axel
 
     - name: Download Video
-      run: axel -o video "${{ env.VIDEO_URL }}"
+      run: wget -o video "${{ env.VIDEO_URL }}"
       # Uses the extracted URL to download the video.
 
     - name: Make Output Folder
