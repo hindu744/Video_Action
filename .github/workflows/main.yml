@@ -21,9 +21,6 @@ jobs:
         VIDEO_URL=$(cat link.txt)
         echo "Video URL is $VIDEO_URL"
         echo "VIDEO_URL=$VIDEO_URL" >> $GITHUB_ENV
-        VIDEO_ID=$(cat name.txt)
-        echo "Video Id is $VIDEO_ID"
-        echo "VIDEO_ID=$VIDEO_ID" >> $GITHUB_ENV
       # Replace "path/to/url_file.txt" with the path to the file containing the video URL.
 
     - name: Install FFMPEG
@@ -61,16 +58,19 @@ jobs:
 
     - name: Commit and Push HLS Files
       run: |
+        VIDEO_ID=$(cat name.txt)
+        echo "Video Id is $VIDEO_ID"
+        
         cd hls-content
         ls
         git init
         git config --global user.name 'hindu744'
         git config --global user.email 'hhindu744@gmail.com'
         # git config --global init.defaultBranch ${{ env.VIDEO_ID }}
-        git branch -m test
+        git branch -m $VIDEO_ID
         git add .
         git commit -m "Upload HLS files"
         git remote add origin https://github.com/hindu744/hls-content.git
         git remote set-url origin https://hindu744:${{secrets.TOKEN}}@github.com/hindu744/hls-content
-        git push --set-upstream origin test
-        git push origin test
+        git push --set-upstream origin $VIDEO_ID
+        git push
