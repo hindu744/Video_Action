@@ -68,10 +68,10 @@ jobs:
         git config --global user.name 'hindu744'
         git config --global user.email 'hhindu744@gmail.com'
         # git config --global init.defaultBranch ${{ env.VIDEO_ID }}
-        git branch -m testv4
+        git branch -m testv5
         git add .
         git commit -m "Upload HLS files"
         git remote add origin https://github.com/hindu744/hls-content.git
         git remote set-url origin https://hindu744:${{secrets.TOKEN}}@github.com/hindu744/hls-content
-        git push --set-upstream origin testv4
-        git push origin testv4
+        git push --set-upstream origin testv5
+        git push origin testv5
