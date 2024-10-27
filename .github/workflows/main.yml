@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-
 jobs:
   Download-and-Process:
     runs-on: ubuntu-latest
@@ -15,38 +14,20 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v3
 
-    - name: Extract Video URL and ID
-      id: extract_url
-      run: |
-        VIDEO_URL=$(cat link.txt)
-        echo "Video URL is $VIDEO_URL"
-        echo "VIDEO_URL=$VIDEO_URL" >> $GITHUB_ENV
-      # Replace "path/to/url_file.txt" with the path to the file containing the video URL.
-
     - name: Install FFMPEG and Git
       run: sudo apt-get update && sudo apt-get install -y ffmpeg git tree axel
 
     - name: Download Video
-      run: wget -O video "${{ env.VIDEO_URL }}"
-      # Uses the extracted URL to download the video.
+      run: wget -O video "https://filebin.net/joufvrfr5v2sxdw7/Count.mp4"
 
     - name: Make Output Folder
-      run: |
-        mkdir hls_output
-        mkdir hls_output/240p
-        mkdir hls_output/360p
-        mkdir hls_output/480p
-        mkdir hls_output/720p
-        mkdir hls_output/1080p
-        ls
+      run: mkdir hls_output hls_output/240p hls_output/360p hls_output/480p hls_output/720p hls_output/1080p
 
-    - name: Convert Video to HLS using FFmpeg
-      run: |
-        ffmpeg -i video -filter_complex \
+    - name: Convert Video to HLS using FFMPEG
+      run: ffmpeg -i video -filter_complex \
           "[0:v]split=5[v240][v360][v480][v720][v1080]; \
           [v240]scale=-2:240[v240out]; \
           [v360]scale=-2:360[v360out]; \
-          [v480]scale=-2:480[v480out]; \
           [v720]scale=-2:720[v720out]; \
           [v1080]scale=-2:1080[v1080out]" \
           -map "[v240out]" -map 0:a -codec:v libx264 -codec:a aac -b:v 800k -hls_time 12 -hls_flags independent_segments -hls_segment_type mpegts -hls_playlist_type vod -start_number 0 -hls_list_size 0 -f hls ./hls_output/240p/index.m3u8 \
@@ -54,33 +35,24 @@ jobs:
           -map "[v480out]" -map 0:a -codec:v libx264 -codec:a aac -b:v 2000k -hls_time 12 -hls_flags independent_segments -hls_segment_type mpegts -hls_playlist_type vod -start_number 0 -hls_list_size 0 -f hls ./hls_output/480p/index.m3u8 \
           -map "[v720out]" -map 0:a -codec:v libx264 -codec:a aac -b:v 3500k -hls_time 12 -hls_flags independent_segments -hls_segment_type mpegts -hls_playlist_type vod -start_number 0 -hls_list_size 0 -f hls ./hls_output/720p/index.m3u8 \
           -map "[v1080out]" -map 0:a -codec:v libx264 -codec:a aac -b:v 6000k -hls_time 12 -hls_flags independent_segments -hls_segment_type mpegts -hls_playlist_type vod -start_number 0 -hls_list_size 0 -f hls ./hls_output/1080p/index.m3u8
-          
-    
-      # This will create an HLS playlist (index.m3u8) and the .ts files in the "hls_output" directory.
-      
+
     - name: Copy HLS Files
       run: |
         mkdir hls-content
         tree
         cp -r hls_output/* hls-content
         cp master.m3u8 hls-content
-      # This copies all HLS files into the target repository's directory.
 
     - name: Commit and Push HLS Files
       run: |
-        VIDEO_ID=$(cat name.txt)
-        echo "Video Id is $VIDEO_ID"
-        
         cd hls-content
-        tree
         git init
         git config --global user.name 'hindu744'
         git config --global user.email 'hhindu744@gmail.com'
-        # git config --global init.defaultBranch ${{ env.VIDEO_ID }}
-        git branch -m testv6
+        git branch -m testf7
         git add .
-        git commit -m "Upload HLS files"
+        git commit -m "Upload HLS files testf7"
         git remote add origin https://github.com/hindu744/hls-content.git
         git remote set-url origin https://hindu744:${{secrets.TOKEN}}@github.com/hindu744/hls-content
-        git push --set-upstream origin testv6
-        git push origin testv6
+        git push --set-upstream origin testf7
+        git push origin testf7
