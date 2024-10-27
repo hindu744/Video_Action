@@ -43,7 +43,7 @@ jobs:
         tree
         cp -r hls_output/* hls-content
         cp master.m3u8 hls-content
-        cp master name.txt hls-content
+        cp name.txt hls-content
 
     - name: Commit and Push HLS Files
       run: |
