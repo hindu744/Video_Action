@@ -18,7 +18,7 @@ jobs:
       run: sudo apt-get update && sudo apt-get install -y ffmpeg git tree axel
 
     - name: Download Video
-      run: wget -O video "https://filebin.net/joufvrfr5v2sxdw7/Count.mp4"
+      run: wget -O video "$(cat link.txt)"
 
     - name: Make Output Folder
       run: mkdir hls_output hls_output/240p hls_output/360p hls_output/480p hls_output/720p hls_output/1080p
@@ -50,10 +50,10 @@ jobs:
         git init
         git config --global user.name 'hindu744'
         git config --global user.email 'hhindu744@gmail.com'
-        git branch -m testf7
+        git branch -m $(cat name.txt)
         git add .
-        git commit -m "Upload HLS files testf7"
+        git commit -m "Upload HLS files $(cat name.txt)"
         git remote add origin https://github.com/hindu744/hls-content.git
         git remote set-url origin https://hindu744:${{secrets.TOKEN}}@github.com/hindu744/hls-content
-        git push --set-upstream origin testf7
-        git push origin testf7
+        git push --set-upstream origin $(cat name.txt)
+        git push origin $(cat name.txt)
