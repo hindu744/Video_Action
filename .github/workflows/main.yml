@@ -51,10 +51,12 @@ jobs:
         git init
         git config --global user.name 'hindu744'
         git config --global user.email 'hhindu744@gmail.com'
-        git branch -m $(cat name.txt)
+
+        BRANCH_NAME=$(cat name.txt)
+        git branch -m "$BRANCH_NAME"
         git add .
-        git commit -m "Upload HLS files $(cat name.txt)"
+        git commit -m "Upload HLS files $BRANCH_NAME"
         git remote add origin https://github.com/hindu744/hls-content.git
-        git remote set-url origin https://hindu744:${{secrets.TOKEN}}@github.com/hindu744/hls-content
-        git push --set-upstream origin $(cat name.txt)
-        git push origin $(cat name.txt)
+        git remote set-url origin https://hindu744:${{secrets.TOKEN}}@github.com/hindu744/hls-content.git
+        # git push --set-upstream origin $(cat name.txt)
+        git push origin "$BRANCH_NAME"
