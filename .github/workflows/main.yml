@@ -52,7 +52,7 @@ jobs:
         git config --global user.name 'hindu744'
         git config --global user.email 'hhindu744@gmail.com'
 
-        BRANCH_NAME=$(cat name.txt)
+        BRANCH_NAME=$(cat name.txt | tr -d '[:space:]')
         git branch -m "$BRANCH_NAME"
         git add .
         git commit -m "Upload HLS files $BRANCH_NAME"
